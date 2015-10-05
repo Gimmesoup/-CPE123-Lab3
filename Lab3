@@ -1,0 +1,44 @@
+(require rsound)
+(require 2htdp/image)
+(require 2htdp/universe)
+
+
+
+
+
+
+;;;Kick Hare Snare Hat
+;;Play sound when a key is hit
+;;First hit is kick, second hit is hi-hat, third is snare, fourth is hi hat, then loop
+
+;;States are strings for the above sounds
+
+;World scene
+(define scene (empty-scene 500 500))
+
+;Scene drawer
+(define (drawSound w)
+ (overlay
+  (text w 30 "blue")
+  scene
+ )
+)
+
+;Keyhandler; Cycles through the different states after playing a sound dependant on the state
+(define (cycler w k)
+ (cond
+  [string=? w "kick"    (andplay kick    "hi-hat1")]
+  [string=? w "hi-hat1" (andplay hi-hat  "snare")  ]
+  [string=? w "snare"   (andplay snare   "hi-hat2")]
+  [string=? w "hi-hat2" (andplay hi-hat2 "kick")   ]
+  [else w] ; This should hopefully never happen
+ )
+)
+
+;State is string containing kick, hi-hat1, snare, or hi-hat2
+;Start on kick
+(big-bang "kick"
+ [on-key ] ; Makes the things happen when we press the keys
+ [to-draw ] ; Because BB makes us draw ;-;
+)
+
